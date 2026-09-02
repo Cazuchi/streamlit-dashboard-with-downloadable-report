@@ -4,7 +4,7 @@ import streamlit as st
 from fpdf import FPDF
 from fpdf.fonts import FontFace
 
-def create_pdf(headline, text_one, table_one, text_two, table_three):#, text_three, table_two_graph):
+def create_pdf(headline, text_one, table_one, text_two, table_three, text_three, table_two_graph):
     pdf = FPDF()
     pdf.set_auto_page_break(auto=True, margin=15)
     pdf.add_page()
@@ -110,5 +110,16 @@ def create_pdf(headline, text_one, table_one, text_two, table_three):#, text_thr
             for datum in data_row:
                 row.cell(datum)
     pdf.ln(2)
+
+    pdf.add_page()
+    pdf.set_font("Helvetica", size=11)
+    pdf.multi_cell(
+        0, 6,
+        text_three
+    )
+    pdf.ln(2)
+    
+    img_bytes = table_two_graph.to_image(format="png", width=900, height=450, scale=2)
+    pdf.image(io.BytesIO(img_bytes), w=180)
 
     return bytes(pdf.output())
